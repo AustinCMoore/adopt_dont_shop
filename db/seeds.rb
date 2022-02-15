@@ -12,5 +12,5 @@ pet_1 = Pet.create!(adoptable: true, age: 1, breed: 'sphynx', name: 'Bare-y Mani
 pet_2 = Pet.create!(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: shelter_1.id)
 pet_3 = Pet.create!(adoptable: true, age: 1, breed: 'domestic shorthair', name: 'Sylvester', shelter_id: shelter_2.id)
 pet_4 = Pet.create!(adoptable: true, age: 1, breed: 'orange tabby shorthair', name: 'Lasagna', shelter_id: shelter_1.id)
-# pet_application_1 = PetApplication.create!(pet: pet_1, application: application_1, approved: true)
+# pet_application_1 = PetApplication.create!(pet: pet_1, application: application_1, status: :pending)
 # pet_application_2 = PetApplication.create!(pet: pet_2, application: application_1, approved: true)
