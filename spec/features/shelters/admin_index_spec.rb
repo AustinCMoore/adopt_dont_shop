@@ -11,33 +11,31 @@ RSpec.describe 'the shelters index' do
     visit "/admin/shelters"
   end
 
-  scenario "as an admin" do
-    it "lists all Shelters names" do
-      expect(page).to have_current_path("/admin/shelters")
-      expect(page).to have_content(@shelter_1.name)
-      expect(page).to have_content(@shelter_2.name)
-      expect(page).to have_content(@shelter_3.name)
+  it "lists all Shelters names" do
+    expect(page).to have_current_path("/admin/shelters")
+    expect(page).to have_content(@shelter_1.name)
+    expect(page).to have_content(@shelter_2.name)
+    expect(page).to have_content(@shelter_3.name)
+  end
+
+  it 'lists the shelters by name in reverse alphabetical order' do
+    first = find("#shelter-#{@shelter_2.id}")
+    second = find("#shelter-#{@shelter_3.id}")
+    third = find("#shelter-#{@shelter_1.id}")
+
+    expect(first).to appear_before(second)
+    expect(second).to appear_before(third)
+
+    within "#shelter-#{@shelter_2.id}" do
+      expect(page).to have_content("Name: #{@shelter_2.name}")
     end
 
-    it 'lists the shelters by name in reverse alphabetical order' do
-      first = find("#shelter-#{@shelter_2.id}")
-      second = find("#shelter-#{@shelter_3.id}")
-      third = find("#shelter-#{@shelter_1.id}")
+    within "#shelter-#{@shelter_3.id}" do
+      expect(page).to have_content("Name: #{@shelter_3.name}")
+    end
 
-      expect(third).to appear_before(second)
-      expect(second).to appear_before(first)
-
-      within "#shelter-#{@shelter_2.id}" do
-        expect(page).to have_content("Name: #{@shelter_2.name}")
-      end
-
-      within "#shelter-#{@shelter_3.id}" do
-        expect(page).to have_content("Name: #{@shelter_3.name}")
-      end
-
-      within "#shelter-#{@shelter_1.id}" do
-        expect(page).to have_content("Name: #{@shelter_1.name}")
-      end
+    within "#shelter-#{@shelter_1.id}" do
+      expect(page).to have_content("Name: #{@shelter_1.name}")
     end
   end
 end

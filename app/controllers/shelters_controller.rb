@@ -59,10 +59,6 @@ class SheltersController < ApplicationController
     redirect_to '/shelters'
   end
 
-  def admin_index
-    # binding.pry
-  end
-
   private
 
   def shelter_params
