@@ -1,6 +1,5 @@
 class ApplicationsController < ApplicationController
   def index
-
   end
 
   def show
@@ -16,12 +15,13 @@ class ApplicationsController < ApplicationController
   end
 
   def create
+    build_address
     @application = Application.new(
       name: params[:name],
       street_address: params[:street_address],
       city: params[:city],
       state: params[:state],
-      zip_code: params[:zip_code],
+      zip_code: params[:full_address],
       description: params[:description],
       full_address: params[:full_address],
       status: params[:status]
@@ -54,5 +54,9 @@ class ApplicationsController < ApplicationController
       :full_address,
       :status
     )
+  end
+
+  def build_address
+    params[:full_address] = "#{params[:street_address]}\n#{params[:city]}, #{params[:state]} #{params[:zip_code]}"
   end
 end
