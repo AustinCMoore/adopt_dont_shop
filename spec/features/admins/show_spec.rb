@@ -36,28 +36,48 @@ RSpec.describe 'the admin application show page' do
   end
 
   it "has a link to approve a specific pet" do
-    expect(page).to have_link("Approve: #{@pet_1.name}")
-    expect(page).to have_link("Approve: #{@pet_4.name}")
-    expect(page).to_not have_link("Approve: #{@pet_2.name}")
-    expect(page).to_not have_link("Approve: #{@pet_3.name}")
+    expect(page).to have_button("Approve: #{@pet_1.name}")
+    expect(page).to have_button("Approve: #{@pet_4.name}")
+    expect(page).to_not have_button("Approve: #{@pet_2.name}")
+    expect(page).to_not have_button("Approve: #{@pet_3.name}")
   end
 
-  it "links to the show page upon approving a pet" do
-    click_link("Approve: #{@pet_1.name}")
+  it "buttons to the show page upon approving a pet" do
+    click_button("Approve: #{@pet_1.name}")
     expect(page).to have_current_path("/admin/applications/#{@application_1.id}")
   end
 
-  it "does not have link to approve a pet after clicking approve pet" do
-    click_link("Approve: #{@pet_1.name}")
+  it "does not have button to approve a pet after clicking approve pet" do
+    click_button("Approve: #{@pet_1.name}")
 
-    expect(page).to have_link("Approve: #{@pet_4.name}")
-    expect(page).to_not have_link("Approve: #{@pet_1.name}")
+    expect(page).to have_button("Approve: #{@pet_4.name}")
+    expect(page).to_not have_button("Approve: #{@pet_1.name}")
   end
 
   it "displays pet status is approved after clicking approve pet" do
-    click_link("Approve: #{@pet_1.name}")
+    click_button("Approve: #{@pet_1.name}")
 
     expect(page).to have_content("#{@pet_1.name} has been approved!")
     expect(page).to_not have_content("#{@pet_4.name} has been approved!")
+  end
+
+  it "buttons to the show page upon rejecting a pet" do
+    click_button("Reject: #{@pet_1.name}")
+    expect(page).to have_current_path("/admin/applications/#{@application_1.id}")
+  end
+
+  it "does not have button to approve or reject a pet after clicking reject pet" do
+    click_button("Reject: #{@pet_1.name}")
+
+    expect(page).to have_button("Reject: #{@pet_4.name}")
+    expect(page).to_not have_button("Reject: #{@pet_1.name}")
+    expect(page).to_not have_button("Approve: #{@pet_1.name}")
+  end
+
+  it "displays pet status is rejected after clicking reject pet" do
+    click_button("Reject: #{@pet_1.name}")
+
+    expect(page).to have_content("#{@pet_1.name} has been rejected!")
+    expect(page).to_not have_content("#{@pet_4.name} has been rejected!")
   end
 end
