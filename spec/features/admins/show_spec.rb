@@ -1,6 +1,10 @@
+# Then I'm taken back to the admin application show page
+# And next to the pet that I approved, I do not see a button to approve this pet
+# And instead I see an indicator next to the pet that they have been approved
+
 require 'rails_helper'
 
-RSpec.describe 'the admin shelters index page' do
+RSpec.describe 'the admin application show page' do
   before(:each) do
     @shelter_1 = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
     @shelter_2 = Shelter.create(name: 'RGV animal shelter', city: 'Harlingen, TX', foster_program: false, rank: 5)
@@ -17,42 +21,47 @@ RSpec.describe 'the admin shelters index page' do
     @pet_application_3 = PetApplication.create!(pet: @pet_2, application: @application_2, status: :pending)
     @pet_application_4 = PetApplication.create!(pet: @pet_3, application: @application_3, status: :pending)
 
-    visit "/admin/shelters"
+    visit "/admin/applications/#{@application_1.id}"
   end
 
-  it "lists all Shelters names" do
-    expect(page).to have_current_path("/admin/shelters")
-    expect(page).to have_content(@shelter_1.name)
-    expect(page).to have_content(@shelter_2.name)
-    expect(page).to have_content(@shelter_3.name)
+  it "displays pending pet_applications for a pending application" do
+    expect(page).to have_current_path("/admin/applications/#{@application_1.id}")
+    expect(page).to have_content(@pet_1.name)
+    expect(page).to have_content(@pet_4.name)
+    expect(page).to_not have_content(@pet_2.name)
+    expect(page).to_not have_content(@pet_3.name)
+
+    visit "/admin/applications/#{@application_2.id}"
+    expect(page).to have_current_path("/admin/applications/#{@application_2.id}")
+    expect(page).to have_content(@pet_2.name)
+    expect(page).to_not have_content(@pet_1.name)
+    expect(page).to_not have_content(@pet_3.name)
+    expect(page).to_not have_content(@pet_4.name)
   end
 
-  it 'lists the shelters by name in reverse alphabetical order' do
-    first = find("#shelter-#{@shelter_2.id}")
-    second = find("#shelter-#{@shelter_3.id}")
-    third = find("#shelter-#{@shelter_1.id}")
-
-    expect(first).to appear_before(second)
-    expect(second).to appear_before(third)
-
-    within "#shelter-#{@shelter_2.id}" do
-      expect(page).to have_content("Name: #{@shelter_2.name}")
-    end
-
-    within "#shelter-#{@shelter_3.id}" do
-      expect(page).to have_content("Name: #{@shelter_3.name}")
-    end
-
-    within "#shelter-#{@shelter_1.id}" do
-      expect(page).to have_content("Name: #{@shelter_1.name}")
-    end
+  it "has a link to approve a specific pet" do
+    expect(page).to have_link("Approve: #{@pet_1.name}")
+    expect(page).to have_link("Approve: #{@pet_4.name}")
+    expect(page).to_not have_link("Approve: #{@pet_2.name}")
+    expect(page).to_not have_link("Approve: #{@pet_3.name}")
   end
 
-  it "displays pending applications" do
-    within '#pending-applications' do
-      expect(page).to have_content(@shelter_1.name)
-      expect(page).to have_content(@shelter_2.name)
-      expect(page).to_not have_content(@shelter_3.name)
-    end
+  it "links to the show page upon approving a pet" do
+    click_link("Approve: #{@pet_1.name}")
+    expect(page).to have_current_path("/admin/applications/#{@application_1.id}")
+  end
+
+  it "does not have link to approve a pet after clicking approve pet" do
+    click_link("Approve: #{@pet_1.name}")
+
+    expect(page).to have_link("Approve: #{@pet_4.name}")
+    expect(page).to_not have_link("Approve: #{@pet_1.name}")
+  end
+
+  it "displays pet status is approved after clicking approve pet" do
+    click_link("Approve: #{@pet_1.name}")
+
+    expect(page).to have_content("#{@pet_1.name} has been approved!")
+    expect(page).to_not have_content("#{@pet_4.name} has been approved!")
   end
 end
