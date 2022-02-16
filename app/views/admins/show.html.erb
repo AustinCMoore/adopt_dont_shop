@@ -1,0 +1,10 @@
+<h1> Review Application </h1>
+<h2> Review Pets </h2>
+<% @application.pet_applications.each do |pet_app| %>
+  <h3> <%= pet_app.pet.name %> </h3>
+  <% if pet_app.status == "approved" %>
+    <%= "#{pet_app.pet.name} has been approved!" %>
+  <% else%>
+    <%= link_to "Approve: #{pet_app.pet.name}", "/admin/applications/#{@application.id}?petappid=#{pet_app.id}", method: :patch %>
+  <% end %>
+<% end %>

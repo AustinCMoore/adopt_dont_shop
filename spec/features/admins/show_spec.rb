@@ -1,7 +1,3 @@
-# Then I'm taken back to the admin application show page
-# And next to the pet that I approved, I do not see a button to approve this pet
-# And instead I see an indicator next to the pet that they have been approved
-
 require 'rails_helper'
 
 RSpec.describe 'the admin application show page' do
