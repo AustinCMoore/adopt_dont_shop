@@ -16,6 +16,7 @@ RSpec.describe 'the admin application show page' do
     @pet_application_2 = PetApplication.create!(pet: @pet_4, application: @application_1, status: :pending)
     @pet_application_3 = PetApplication.create!(pet: @pet_2, application: @application_2, status: :pending)
     @pet_application_4 = PetApplication.create!(pet: @pet_3, application: @application_3, status: :pending)
+    @pet_application_5 = PetApplication.create!(pet: @pet_1, application: @application_2, status: :pending)
 
     visit "/admin/applications/#{@application_1.id}"
   end
@@ -30,7 +31,7 @@ RSpec.describe 'the admin application show page' do
     visit "/admin/applications/#{@application_2.id}"
     expect(page).to have_current_path("/admin/applications/#{@application_2.id}")
     expect(page).to have_content(@pet_2.name)
-    expect(page).to_not have_content(@pet_1.name)
+    expect(page).to have_content(@pet_1.name)
     expect(page).to_not have_content(@pet_3.name)
     expect(page).to_not have_content(@pet_4.name)
   end
@@ -79,5 +80,14 @@ RSpec.describe 'the admin application show page' do
 
     expect(page).to have_content("#{@pet_1.name} has been rejected!")
     expect(page).to_not have_content("#{@pet_4.name} has been rejected!")
+  end
+
+  it "one pet application's status does not affect another's" do
+    click_button("Reject: #{@pet_1.name}")
+
+    visit "/admin/applications/#{@application_2.id}"
+
+    expect(page).to have_content(@pet_1.name)
+    expect(page).to have_button("Reject: #{@pet_1.name}")
   end
 end
