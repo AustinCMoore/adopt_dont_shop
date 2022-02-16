@@ -4,7 +4,10 @@
   <h3> <%= pet_app.pet.name %> </h3>
   <% if pet_app.status == "approved" %>
     <%= "#{pet_app.pet.name} has been approved!" %>
+  <% elsif pet_app.status == "rejected" %>
+    <%= "#{pet_app.pet.name} has been rejected!" %>
   <% else%>
-    <%= link_to "Approve: #{pet_app.pet.name}", "/admin/applications/#{@application.id}?petappid=#{pet_app.id}", method: :patch %>
+    <%= button_to "Approve: #{pet_app.pet.name}", "/admin/applications/#{@application.id}?petappid=#{pet_app.id}", method: :patch, params: {status: :approved} %>
+    <%= button_to "Reject: #{pet_app.pet.name}", "/admin/applications/#{@application.id}?petappid=#{pet_app.id}", method: :patch, params: {status: :rejected} %>
   <% end %>
 <% end %>
