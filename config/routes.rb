@@ -44,7 +44,8 @@ Rails.application.routes.draw do
   post '/applications', to: 'applications#create'
 
   post '/applications/:id', to: 'pet_applications#create'
+  patch '/admin/applications/:id', to: 'pet_applications#update'
 
   get '/admin/shelters', to: 'admins#index'
-
+  get '/admin/applications/:id', to: 'admins#show'
 end

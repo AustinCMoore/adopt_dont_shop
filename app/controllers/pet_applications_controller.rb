@@ -6,4 +6,10 @@ class PetApplicationsController < ApplicationController
     @pet_application.save
     redirect_to "/applications/#{@application.id}"
   end
+
+  def update
+    @reviewed_pet_app = PetApplication.find(params[:petappid])
+    @reviewed_pet_app.update(status: :approved)
+    redirect_to "/admin/applications/#{@reviewed_pet_app.application_id}"
+  end
 end
